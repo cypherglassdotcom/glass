@@ -7,10 +7,7 @@ import initializeDb from './db';
 import middleware from './middleware';
 import api from './api';
 import config from './config.json';
-import ticker from './lib/ticker'
-
-// initializes ticker
-ticker.tickLoop();
+require('./lib/bpTicker')
 
 let app = express();
 app.server = http.createServer(app);

@@ -1,7 +1,7 @@
 import { version } from '../../package.json';
 import { Router } from 'express';
 import facets from './facets';
-import ticker from '../lib/ticker';
+import bpTicker from '../lib/bpTicker';
 
 export default ({ config, db }) => {
 	let api = Router();
@@ -15,8 +15,8 @@ export default ({ config, db }) => {
 	});
 
 	// perhaps expose some API metadata at the root
-	api.get('/ticker', (req, res) => {
-		res.json({ tick: ticker.getTick() });
+	api.get('/bps', (req, res) => {
+		res.json({ bps: bpTicker.getBps() });
 	});
 
 	return api;
