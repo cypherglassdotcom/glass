@@ -1,0 +1,7 @@
+.BpTopMenu.box {
+  width: 96%;
+  margin-left: 2%;
+  margin-top: 25px;
+  z-index: 100;
+  position: absolute;
+}
