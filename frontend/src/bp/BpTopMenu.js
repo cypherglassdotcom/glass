@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import Level from '../components/Level'
 import LevelItem from '../components/LevelItem'
 import LevelLeft from '../components/LevelLeft'
@@ -8,7 +9,46 @@ import './BpTopMenu.css'
 
 class BpTopMenu extends Component {
 
+  menuItem(type, text, action) {
+    const { filter, position } = this.props
+
+    const value = type === 'filter' ? filter : position
+    const link = type === 'filter' ?
+      `/map/${action}/${position}` :
+      `/map/${filter}/${action}`
+
+    return (
+      <LevelItem>
+        { value === action ? <strong>{text}</strong>
+          : <Link to={link}>{text}</Link> }
+      </LevelItem>
+    )
+  }
+
+  renderFilterMenu() {
+    const menu = [
+      this.menuItem('filter', 'Main Location', 'main'),
+      this.menuItem('filter', 'Producer Nodes', 'bp'),
+      this.menuItem('filter', 'All Nodes', 'all')
+    ]
+
+    return menu
+  }
+
+  renderPositionMenu() {
+    const menu = [
+      this.menuItem('position', 'Active BPs', 'abp'),
+      this.menuItem('position', 'Top 50', 'top50'),
+      this.menuItem('position', 'Top 100', 'top100'),
+      this.menuItem('position', 'All', 'all')
+    ]
+
+    return menu
+  }
+
   render() {
+    const { position, filter } = this.props
+
     return (
       <Box className="BpTopMenu">
         <Level>
@@ -26,15 +66,10 @@ class BpTopMenu extends Component {
                 </p>
               </div>
             </LevelItem>
-            <LevelItem><strong>Main Location</strong></LevelItem>
-            <LevelItem><a>Producer Nodes</a></LevelItem>
-            <LevelItem><a>All Nodes</a></LevelItem>
+            {this.renderFilterMenu()}
           </LevelLeft>
           <LevelRight>
-            <LevelItem><a>Active BPs</a></LevelItem>
-            <LevelItem><strong>Top 50</strong></LevelItem>
-            <LevelItem><a>Top 100</a></LevelItem>
-            <LevelItem><a>All</a></LevelItem>
+            {this.renderPositionMenu()}
           </LevelRight>
         </Level>
       </Box>
