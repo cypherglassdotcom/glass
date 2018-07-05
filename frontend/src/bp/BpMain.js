@@ -132,7 +132,8 @@ class BpMain extends Component {
     this.state = {
       bps: DATA.bps,
       selectedBp: null,
-      mapCenter: [0,50]
+      mapCenter: [0,50],
+      mapZoom: [1]
     }
   }
 
@@ -184,7 +185,7 @@ class BpMain extends Component {
   }
 
   render() {
-    const { mapCenter } = this.state
+    const { mapCenter, mapZoom } = this.state
 
     return (
       <section>
@@ -192,7 +193,7 @@ class BpMain extends Component {
         <Map
           // eslint-disable-next-line
           style={MAPBOX_STYLE}
-          zoom={[1]}
+          zoom={mapZoom}
           center={mapCenter}
           containerStyle={MAP_STYLE}>
             {this.renderMarkers()}
