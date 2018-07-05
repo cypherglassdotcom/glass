@@ -47,8 +47,6 @@ class BpTopMenu extends Component {
   }
 
   render() {
-    const { position, filter } = this.props
-
     return (
       <Box className="BpTopMenu">
         <Level>
