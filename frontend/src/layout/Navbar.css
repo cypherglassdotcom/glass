@@ -1,0 +1,47 @@
+.NavbarCg {
+  background-color: #23114f;
+  height: 100px;
+}
+
+.NavbarCg .icon {
+  margin-right: 2px;
+}
+
+.NavbarCg .navbar-item {
+  color: #fff;
+}
+
+.NavbarCg.navbar a.navbar-item.is-active {
+  color: #7FF3FC;
+  font-weight: 700;
+}
+
+.NavbarCg.navbar .navbar-item:hover {
+  background-color: #23114f;
+  text-decoration: underline;
+  color: #fff;
+}
+
+.NavbarCg.navbar .navbar-menu .navbar-end {
+  margin-right: 20px;
+}
+
+.NavbarCg>.logo {
+  font-family: 'Montserrat', sans-serif;
+  color: #fff;
+  font-weight: 700;
+  font-size: 28px;
+  margin: 24px;
+}
+
+.NavbarCg>.logo>.title-span {
+  margin-left: 8px;
+  margin-top: 10px;
+  margin-right: 12px;
+}
+
+.NavbarCg>.logo>.logo-img {
+  max-width: 240px;
+  height: 80px;
+  margin-top: -10px;
+}
