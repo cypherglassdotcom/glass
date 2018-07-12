@@ -1,14 +1,14 @@
 {
   "name": "bpwatcher",
   "version": "1.0.0",
-  "description": "",
+  "description": "Log all the registered producers data with bp.json file",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["eos", "eosjs", "blockchain", "block-producers"],
+  "author": "Leo Ribeiro",
+  "license": "MIT",
   "dependencies": {
     "axios": "^0.18.0",
     "commander": "^2.16.0",
