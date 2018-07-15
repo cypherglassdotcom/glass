@@ -1,4 +1,9 @@
-export default callback => {
-	// connect to a database if needed, then pass it to `callback`:
-	callback();
+const MongoClient = require('mongodb').MongoClient
+
+const DB_URI = "mongodb://localhost:27017/cg_glass"
+
+const connect = url => {
+  return MongoClient.connect(url).then(client => client.db())
 }
+
+module.exports = () => connect(DB_URI)

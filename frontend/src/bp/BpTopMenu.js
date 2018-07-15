@@ -9,6 +9,13 @@ import './BpTopMenu.css'
 
 class BpTopMenu extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      search: ''
+    }
+  }
+
   menuItem(type, text, action) {
     const { filter, position } = this.props
 
@@ -18,7 +25,7 @@ class BpTopMenu extends Component {
       `/map/${filter}/${action}`
 
     return (
-      <LevelItem>
+      <LevelItem key={link}>
         { value === action ? <strong>{text}</strong>
           : <Link to={link}>{text}</Link> }
       </LevelItem>
@@ -47,18 +54,25 @@ class BpTopMenu extends Component {
   }
 
   render() {
+    const { totalBps, doSearch } = this.props
+    const { search } = this.state
+
     return (
       <Box className="BpTopMenu">
         <Level>
           <LevelLeft>
-            <LevelItem><p><strong>221</strong> Block Producers</p></LevelItem>
+            <LevelItem><p><strong>{totalBps}</strong> Block Producers</p></LevelItem>
             <LevelItem>
               <div className="field has-addons">
                 <p className="control">
-                  <input className="input is-small" type="text" placeholder="Find a Producer" />
+                  <input
+                    className="input is-small"
+                    onChange={(e) => this.setState({search: e.target.value})}
+                    type="text"
+                    placeholder="Find a Producer" />
                 </p>
                 <p className="control">
-                  <button className="button is-small">
+                  <button onClick={() => doSearch(search)} className="button is-small">
                     Search
                   </button>
                 </p>

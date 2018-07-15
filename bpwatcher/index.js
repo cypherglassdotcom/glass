@@ -48,13 +48,14 @@ const updateBps = (bpRows) => {
 
   bpRows.forEach(bp => {
     console.log(`Adding new BP ${bp.owner}`)
+    bp.total_votes = bp.total_votes ? Number(bp.total_votes) : 0
     bps.push(bp)
   })
 }
 
 const sortBps = () => {
   bps.sort((a, b) => {
-    return Number(b.total_votes) - Number(a.total_votes)
+    return b.total_votes - a.total_votes
   })
 }
 

@@ -11,6 +11,7 @@ class Navbar extends React.Component {
     const { location } = this.props
 
     const mapActive = location.pathname === '/' ? 'is-active' : ''
+    const listActive = location.pathname === '/list' ? 'is-active' : ''
     const aboutActive = location.pathname === '/about' ? 'is-active' : ''
 
     return (
@@ -25,7 +26,13 @@ class Navbar extends React.Component {
               <span className="icon">
                 <i className="fas fa-map"></i>
               </span>
-              <span className="navbar-item-text">Map</span>
+              <span className="navbar-item-text">Map View</span>
+            </Link>
+            <Link to="/" className={`navbar-item ${listActive}`}>
+              <span className="icon">
+                <i className="fas fa-list"></i>
+              </span>
+              <span className="navbar-item-text">List View</span>
             </Link>
             <Link to="/about" className={`navbar-item ${aboutActive}`}>
               <span className="icon">
