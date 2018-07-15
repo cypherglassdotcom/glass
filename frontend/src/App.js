@@ -14,8 +14,6 @@ class App extends Component {
 
           <Route exact path="/" component={BpMain} />
           <Route path="/map/:filter(main|bp|all)/:position(all|abp|top50|top100)" component={BpMain} />
-          {/* <Route path="/map/:position(asc|desc)" component={ComponentWithRegex} /> */}
-          <Route path="/map" component={BpMain} />
           <Route path="/about" component={About} />
         </div>
       </Router>

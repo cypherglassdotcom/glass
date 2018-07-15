@@ -54,14 +54,16 @@ class BpTopMenu extends Component {
   }
 
   render() {
-    const { totalBps, doSearch } = this.props
+    const { totalBps, countBps, doSearch } = this.props
     const { search } = this.state
 
     return (
       <Box className="BpTopMenu">
         <Level>
           <LevelLeft>
-            <LevelItem><p><strong>{totalBps}</strong> Block Producers</p></LevelItem>
+            <LevelItem>
+              <p>{countBps} of {totalBps} Reg. Block Producers</p>
+            </LevelItem>
             <LevelItem>
               <div className="field has-addons">
                 <p className="control">

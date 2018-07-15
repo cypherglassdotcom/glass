@@ -32,15 +32,34 @@ class BpMain extends Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    const { match: { params: { position: prevPosition, filter: prevFilter } } } = prevProps
+    const { match: { params: { position: currentPosition, filter: currentFilter } } } = this.props
+
+    if (prevPosition !== currentPosition || prevFilter !== currentFilter) {
+      console.log('new position route')
+      this.refreshData()
+    }
+  }
+
   componentDidMount() {
     this.refreshData()
   }
 
   refreshData(search) {
     const { match: {params: { position } } } = this.props
-    this.setState({isLoading: true})
+    this.setState({isLoading: true, selectedBp: null})
 
-    listBps(50, search)
+    let limit = 0
+    switch (position) {
+      case 'abp': limit = 21; break
+      case 'top50': limit = 50; break
+      case 'top100': limit = 100; break
+      case 'all': limit = 9999; break
+      default: limit = 50
+    }
+
+    listBps(limit, search)
       .then(data => {
         this.setState({bps: data, isLoading: false})
       }).catch(err => {
@@ -103,10 +122,39 @@ class BpMain extends Component {
         const locations = []
         switch(currentFilter) {
           case 'bp':
+            // add bp nodes
+            const { json: { nodes } } = bp
+            if (nodes && nodes.length) {
+              nodes.filter(n => n.is_producer || n.node_type === 'producer')
+                .map(n => n.location)
+                .forEach(location => {
+                  if (location && location.latitude && location.longitude) {
+                    locations.push(location)
+                  }
+                })
+            }
             break;
           case 'all':
+            // add main location
+            const { json: { org: { location: mainLocation } } } = bp
+            if (mainLocation && mainLocation.latitude && mainLocation.longitude) {
+              locations.push(mainLocation)
+            }
+
+            // add all nodes
+            const { json: { nodes: allNodes } } = bp
+            if (allNodes && allNodes.length) {
+              allNodes.map(n => n.location)
+                .forEach(location => {
+                  if (location && location.latitude && location.longitude) {
+                    locations.push(location)
+                  }
+                })
+            }
             break;
           default:
+
+            // add main location
             const { json: { org: { location } } } = bp
             if (location && location.latitude && location.longitude) {
               locations.push(location)
@@ -116,13 +164,18 @@ class BpMain extends Component {
         locations.forEach((location, index) => {
 
           // fix latitude/longitude for wrongly bps data :P
-          const newLocation = {...location}
+          const newLocation = {
+            ...location,
+            longitude: Number(location.longitude),
+            latitude: Number(location.latitude)
+          }
           if (newLocation.latitude > 90) {
             newLocation.latitude = location.longitude
             newLocation.longitude = location.latitude
           }
 
-          if (newLocation.latitude > 90) {
+          if (newLocation.latitude > 90 || isNaN(newLocation.latitude) ||
+            isNaN(newLocation.longitude)) {
             console.error(`BP ${bp.owner} - Invalid Location >>> `, location)
           } else {
             const key = `${bp.owner}-${index}`
@@ -135,13 +188,14 @@ class BpMain extends Component {
   }
 
   render() {
-    const { mapCenter, mapZoom, totalBps } = this.state
+    const { mapCenter, mapZoom, totalBps, bps } = this.state
     const { match } = this.props
 
     return (
       <section>
         <BpTopMenu
           totalBps={totalBps}
+          countBps={bps.length}
           doSearch={this.refreshData}
           position={match.params.position || 'top50' }
           filter={match.params.filter || 'main' } />

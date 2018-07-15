@@ -10,7 +10,10 @@ class Navbar extends React.Component {
 
     const { location } = this.props
 
-    const mapActive = location.pathname === '/' ? 'is-active' : ''
+    console.log(location.pathname)
+
+    const mapActive = location.pathname === '/' ||
+      location.pathname.indexOf('/map') === 0 ? 'is-active' : ''
     const listActive = location.pathname === '/list' ? 'is-active' : ''
     const aboutActive = location.pathname === '/about' ? 'is-active' : ''
 
