@@ -103,13 +103,21 @@ const saveBps = async () => {
 
     const db = client.db(program.database)
 
-    const collection = db.collection(program.mongocoll);
-    collection.insertMany(bps, (err, result) => {
+    const collection = db.collection(program.mongocoll)
+    const bulk = collection.initializeUnorderedBulkOp()
+
+    const updatedAt = (new Date()).getTime()
+    bps.forEach(bp => {
+      bp.updatedAt = updatedAt
+      bulk.find({owner: bp.owner}).upsert().update({$set: bp})
+    })
+
+    bulk.execute((err, result) => {
       if (err) {
         console.error('Fail to insert bps to mongo db', err)
         return
       }
-      console.log(`Inserted ${result.result.n} BPs into the collection`)
+      console.log(`${result.nModified} updated and ${result.nInserted} inserted into the collection`)
     })
 
     client.close()
