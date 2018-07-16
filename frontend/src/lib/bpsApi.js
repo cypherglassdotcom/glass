@@ -14,7 +14,13 @@ const countBps = () => {
     .then(res => res.data.bps)
 }
 
+const getBp = account => {
+  return axios.get(`http://localhost:8080/api/bps/${account}`)
+    .then(res => res.data)
+}
+
 export {
   listBps,
-  countBps
+  countBps,
+  getBp
 }

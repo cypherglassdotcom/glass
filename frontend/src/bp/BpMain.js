@@ -28,7 +28,8 @@ class BpMain extends Component {
       search: null,
       selectedBp: null,
       mapCenter: [0,50],
-      mapZoom: [1]
+      mapZoom: [1],
+      isLoading: false
     }
   }
 
@@ -163,6 +164,7 @@ class BpMain extends Component {
                 })
             }
             break;
+
           case 'all':
             // add main location
             const { json: { org: { location: mainLocation } } } = bp
@@ -181,8 +183,8 @@ class BpMain extends Component {
                 })
             }
             break;
-          default:
 
+          default:
             // add main location
             const { json: { org: { location } } } = bp
             if (location && location.latitude && location.longitude) {

@@ -31,12 +31,12 @@ class Navbar extends React.Component {
               </span>
               <span className="navbar-item-text">Map View</span>
             </Link>
-            <Link to="/" className={`navbar-item ${listActive}`}>
+            {/* <Link to="/" className={`navbar-item ${listActive}`}>
               <span className="icon">
                 <i className="fas fa-list"></i>
               </span>
               <span className="navbar-item-text">List View</span>
-            </Link>
+            </Link> */}
             <Link to="/about" className={`navbar-item ${aboutActive}`}>
               <span className="icon">
                 <i className="fas fa-question-circle"></i>
