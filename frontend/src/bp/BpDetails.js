@@ -100,7 +100,7 @@ class BpDetails extends Component {
         <div className="has-margin-top">
           <h2 className="title is-5">Nodes List</h2>
           {!nodes || !nodes.length ? <p>This Block Producer has no listed nodes</p> :
-            <table className="table is-striped is-hoverable">
+            <table className="table is-striped is-hoverable is-fullwidth">
               <thead>
                 <tr>
                   <th>Type</th>
