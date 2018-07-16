@@ -1,0 +1,9 @@
+.map-popup img {
+  max-height: 100px;
+  max-width: 100px;
+}
+
+.map-popup .img-col {
+  height: 110px;
+  width: 110px;
+}

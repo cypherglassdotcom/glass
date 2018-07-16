@@ -11,7 +11,7 @@ program
   .description(pkg.description)
   .usage('[options] <command> [...]')
   .option('-u, --url <url>', 'url [https://api.cypherglass.com]', 'https://api.cypherglass.com')
-  .option('-t, --timeout <timeout>', 'bp.json reading timeout [5000]', 5000)
+  .option('-t, --timeout <timeout>', 'bp.json reading timeout [5000]', 15000)
   .option('-m, --mongoaddr <mongoaddr>', 'mongodb address [mongodb://localhost:27017]', 'mongodb://localhost:27017')
   .option('-d, --database <database>', 'mongodb database [cg_glass]', 'cg_glass')
   .option('-c, --mongocoll <mongocoll>', 'mongodb collection [bps]', 'bps')

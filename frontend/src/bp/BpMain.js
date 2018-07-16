@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import ReactMapboxGl, { Marker, Popup } from 'react-mapbox-gl'
 import BpTopMenu from './BpTopMenu'
 import './BpMain.css';
 import markerImg from '../assets/pin.svg'
-import mockData from './BpMain.mock'
 import { listBps, countBps } from '../lib/bpsApi'
 
 const Map = ReactMapboxGl({
@@ -80,6 +80,10 @@ class BpMain extends Component {
     if (!selectedBp)
       return null
 
+    console.log(selectedBp)
+
+    const { bp: { json: { org, nodes } }, name, country } = selectedBp
+
     return (
       <Popup
         key={selectedBp.key}
@@ -87,18 +91,43 @@ class BpMain extends Component {
         offset={{
           'bottom-left': [12, -38],  'bottom': [0, -38], 'bottom-right': [-12, -38]
         }}>
-        <h1>{selectedBp.bp.owner}</h1>
+        <div className="map-popup">
+          <h1 className="title is-5">
+            {(org && org.candidate_name) || selectedBp.bp.owner}
+          </h1>
+          <div className="columns">
+            <div className="column img-col">
+              {(org && org.branding && org.branding.logo_256 &&
+              <img src={org && org.branding && org.branding.logo_256} />) || "No Logo Image" }
+            </div>
+            <div className="column is-two-thirds">
+              { name && country && <p>{name}, {country}</p> }
+              <p><strong>EOS Account:</strong> {selectedBp.bp.owner}</p>
+              {org && org.website &&
+                <p>
+                  <strong>Website:</strong>
+                  {' '}
+                  <a href={org.website} target="_blank">
+                    {org.website}
+                  </a>
+                </p>}
+              <p className="has-margin-top">
+                <Link to={`/bp/${selectedBp.bp.owner}`}>View Details</Link>
+              </p>
+            </div>
+          </div>
+        </div>
       </Popup>
     )
   }
 
-  renderMarker(key, bp, lat, lon) {
+  renderMarker(key, bp, name, country, lat, lon) {
     const coordinates = [lon, lat]
 
     return (
       <Marker
         key={key}
-        onClick={() => this.setState({selectedBp: {bp, lat, lon, key}, mapCenter: coordinates})}
+        onClick={() => this.setState({selectedBp: {bp, name, country, lat, lon, key}, mapCenter: coordinates})}
         anchor="bottom"
         style={{cursor: 'pointer'}}
         coordinates={coordinates}>
@@ -179,7 +208,7 @@ class BpMain extends Component {
             console.error(`BP ${bp.owner} - Invalid Location >>> `, location)
           } else {
             const key = `${bp.owner}-${index}`
-            markers.push(this.renderMarker(key, bp, newLocation.latitude, newLocation.longitude))
+            markers.push(this.renderMarker(key, bp, newLocation.name, newLocation.country, newLocation.latitude, newLocation.longitude))
           }
         })
       })
