@@ -1,0 +1,22 @@
+.img-logo {
+  max-width: 100px;
+  max-height: 100px;
+  float: left;
+  margin-right: 20px;
+}
+
+.details-header>h1.title {
+  margin-bottom: 10px;
+}
+
+.details-header span {
+  margin-right: 10px;
+}
+
+.details-header {
+  height: 120px;
+}
+
+.details-info p {
+  margin-bottom: 10px;
+}
