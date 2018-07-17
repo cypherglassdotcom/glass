@@ -12,8 +12,16 @@ export default (db) => ({
 
   listBps: async (limit, search) => {
 
+    const query = search ?
+      {
+        $or: [
+          {owner: {$regex: search, $options: 'i' }},
+          {"json.org.candidate_name": {$regex: search, $options: 'i' }}
+        ]
+      } : {}
+
     const bps = await db.collection('bps')
-      .find(search ? {owner: {$regex: search, $options: 'i' }} : {})
+      .find(query)
       .project({
         _id: 0,
         owner: 1,

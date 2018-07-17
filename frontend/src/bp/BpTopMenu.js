@@ -70,6 +70,7 @@ class BpTopMenu extends Component {
                   <input
                     className="input is-small"
                     onChange={(e) => this.setState({search: e.target.value})}
+                    onKeyPress={({key}) => key === 'Enter' ? doSearch(search) : null}
                     type="text"
                     placeholder="Find a Producer" />
                 </p>
