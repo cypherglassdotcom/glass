@@ -93,6 +93,11 @@ class BpMain extends Component {
           'bottom-left': [12, -38],  'bottom': [0, -38], 'bottom-right': [-12, -38]
         }}>
         <div className="map-popup">
+          <div className="map-popup-close">
+            <a onClick={()=>this.setState({selectedBp: null})}>
+              <i className="fas fa-times"></i>
+            </a>
+          </div>
           <h1 className="title is-5">
             {(org && org.candidate_name) || selectedBp.bp.owner}
           </h1>

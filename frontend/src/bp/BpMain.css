@@ -7,3 +7,9 @@
   height: 110px;
   width: 110px;
 }
+
+.map-popup-close {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+}

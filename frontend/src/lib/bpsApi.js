@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const listBps = (limit, search) => {
-  let url = `http://localhost:8080/api/bps/list?limit=${limit}`
+  let url = `${process.env.REACT_APP_BACKEND_API}/bps/list?limit=${limit}`
   if (search) {
     url += `&search=${search}`
   }
@@ -10,12 +10,12 @@ const listBps = (limit, search) => {
 }
 
 const countBps = () => {
-  return axios.get(`http://localhost:8080/api/bps`)
+  return axios.get(`${process.env.REACT_APP_BACKEND_API}/bps`)
     .then(res => res.data.bps)
 }
 
 const getBp = account => {
-  return axios.get(`http://localhost:8080/api/bps/${account}`)
+  return axios.get(`${process.env.REACT_APP_BACKEND_API}/bps/${account}`)
     .then(res => res.data)
 }
 
