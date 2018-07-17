@@ -27,6 +27,7 @@ class BpMain extends Component {
       totalBps: 0,
       search: null,
       selectedBp: null,
+      hoveredBp: null,
       mapCenter: [0,50],
       mapZoom: [1],
       isLoading: false
@@ -75,13 +76,29 @@ class BpMain extends Component {
       })
   }
 
+  renderHoverPopup() {
+    const { hoveredBp } = this.state
+
+    if (!hoveredBp)
+      return null
+
+    return (
+      <Popup
+        key={`hoveredbp-${hoveredBp.key}`}
+        coordinates={[hoveredBp.lon, hoveredBp.lat]}
+        offset={{
+          'bottom-left': [12, -38],  'bottom': [0, -38], 'bottom-right': [-12, -38]
+        }}>
+        <p>{hoveredBp.bp.owner}</p>
+      </Popup>
+    )
+  }
+
   renderPopup() {
     const { selectedBp } = this.state
 
     if (!selectedBp)
       return null
-
-    console.log(selectedBp)
 
     const { bp: { json: { org, nodes } }, name, country } = selectedBp
 
@@ -133,6 +150,8 @@ class BpMain extends Component {
     return (
       <Marker
         key={key}
+        onMouseEnter={() => this.setState({hoveredBp: {bp, name, country, lat, lon, key}})}
+        onMouseLeave={() => this.setState({hoveredBp: null})}
         onClick={() => this.setState({selectedBp: {bp, name, country, lat, lon, key}, mapCenter: coordinates})}
         anchor="bottom"
         style={{cursor: 'pointer'}}
@@ -242,6 +261,7 @@ class BpMain extends Component {
           center={mapCenter}
           containerStyle={MAP_STYLE}>
             {this.renderMarkers()}
+            {this.renderHoverPopup()}
             {this.renderPopup()}
         </Map>
       </section>
