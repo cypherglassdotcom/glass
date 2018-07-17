@@ -13,3 +13,16 @@
   right: 15px;
   top: 15px;
 }
+
+.unknown-bps.box {
+  width: 240px;
+  right: 2%;
+  margin-top: 105px;
+  z-index: 100;
+  position: absolute;
+}
+
+.unknown-bps.box ul {
+  max-height: 150px;
+  overflow-y: auto;
+}

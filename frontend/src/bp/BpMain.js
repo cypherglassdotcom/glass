@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import ReactMapboxGl, { Marker, Popup } from 'react-mapbox-gl'
 import BpTopMenu from './BpTopMenu'
 import './BpMain.css';
-import markerImg from '../assets/pin.svg'
+import markerImg from '../assets/new-pin.svg'
 import { listBps, countBps } from '../lib/bpsApi'
 
 const Map = ReactMapboxGl({
@@ -76,6 +76,83 @@ class BpMain extends Component {
       })
   }
 
+  parseBpLocations(bp) {
+
+    const { match: {params: { filter } } } = this.props
+
+    const currentFilter = filter || 'main'
+
+    const locations = []
+
+    switch(currentFilter) {
+      case 'bp':
+        // add bp nodes
+        const { json: { nodes } } = bp
+        if (nodes && nodes.length) {
+          nodes.filter(n => n.is_producer || n.node_type === 'producer')
+            .map(n => n.location)
+            .forEach(location => {
+              if (location && location.latitude && location.longitude) {
+                locations.push(location)
+              }
+            })
+        }
+        break;
+
+      case 'all':
+        // add main location
+        const { json: { org: { location: mainLocation } } } = bp
+        if (mainLocation && mainLocation.latitude && mainLocation.longitude) {
+          locations.push(mainLocation)
+        }
+
+        // add all nodes
+        const { json: { nodes: allNodes } } = bp
+        if (allNodes && allNodes.length) {
+          allNodes.map(n => n.location)
+            .forEach(location => {
+              if (location && location.latitude && location.longitude) {
+                locations.push(location)
+              }
+            })
+        }
+        break;
+
+      default:
+        // add main location
+        const { json: { org: { location } } } = bp
+        if (location && location.latitude && location.longitude) {
+          locations.push(location)
+        }
+    }
+
+    const finalLocations = []
+
+    locations.forEach((location, index) => {
+
+      // fix latitude/longitude for wrongly bps data :P
+      const newLocation = {
+        ...location,
+        longitude: Number(location.longitude),
+        latitude: Number(location.latitude)
+      }
+      if (newLocation.latitude > 90) {
+        newLocation.latitude = location.longitude
+        newLocation.longitude = location.latitude
+      }
+
+      if (newLocation.latitude > 90 ||
+        isNaN(newLocation.latitude) || isNaN(newLocation.longitude) ||
+        (newLocation.latitude === 0 && newLocation.longitude === 0)) {
+        console.error(`BP ${bp.owner} - Invalid Location >>> `, location)
+      } else {
+        finalLocations.push(newLocation)
+      }
+    })
+
+    return finalLocations
+  }
+
   renderHoverPopup() {
     const { hoveredBp } = this.state
 
@@ -100,7 +177,9 @@ class BpMain extends Component {
     if (!selectedBp)
       return null
 
-    const { bp: { json: { org, nodes } }, name, country } = selectedBp
+    const { bp: { json: { org } }, name, country } = selectedBp
+
+    const bpTitle = (org && org.candidate_name) || selectedBp.bp.owner
 
     return (
       <Popup
@@ -115,13 +194,11 @@ class BpMain extends Component {
               <i className="fas fa-times"></i>
             </a>
           </div>
-          <h1 className="title is-5">
-            {(org && org.candidate_name) || selectedBp.bp.owner}
-          </h1>
+          <h1 className="title is-5">{bpTitle}</h1>
           <div className="columns">
             <div className="column img-col">
               {(org && org.branding && org.branding.logo_256 &&
-              <img src={org && org.branding && org.branding.logo_256} />) || "No Logo Image" }
+              <img src={org && org.branding && org.branding.logo_256} alt={bpTitle} />) || "No Logo Image" }
             </div>
             <div className="column is-two-thirds">
               { name && country && <p>{name}, {country}</p> }
@@ -163,83 +240,52 @@ class BpMain extends Component {
 
   renderMarkers() {
 
-    const { match: {params: { filter } } } = this.props
-
-    const currentFilter = filter || 'main'
-
     const markers = []
 
     this.state.bps
       .filter(bp => bp.json && bp.json.org && bp.json.nodes)
       .forEach(bp => {
+        const locations = this.parseBpLocations(bp)
 
-        const locations = []
-        switch(currentFilter) {
-          case 'bp':
-            // add bp nodes
-            const { json: { nodes } } = bp
-            if (nodes && nodes.length) {
-              nodes.filter(n => n.is_producer || n.node_type === 'producer')
-                .map(n => n.location)
-                .forEach(location => {
-                  if (location && location.latitude && location.longitude) {
-                    locations.push(location)
-                  }
-                })
-            }
-            break;
-
-          case 'all':
-            // add main location
-            const { json: { org: { location: mainLocation } } } = bp
-            if (mainLocation && mainLocation.latitude && mainLocation.longitude) {
-              locations.push(mainLocation)
-            }
-
-            // add all nodes
-            const { json: { nodes: allNodes } } = bp
-            if (allNodes && allNodes.length) {
-              allNodes.map(n => n.location)
-                .forEach(location => {
-                  if (location && location.latitude && location.longitude) {
-                    locations.push(location)
-                  }
-                })
-            }
-            break;
-
-          default:
-            // add main location
-            const { json: { org: { location } } } = bp
-            if (location && location.latitude && location.longitude) {
-              locations.push(location)
-            }
-        }
-
-        locations.forEach((location, index) => {
-
-          // fix latitude/longitude for wrongly bps data :P
-          const newLocation = {
-            ...location,
-            longitude: Number(location.longitude),
-            latitude: Number(location.latitude)
-          }
-          if (newLocation.latitude > 90) {
-            newLocation.latitude = location.longitude
-            newLocation.longitude = location.latitude
-          }
-
-          if (newLocation.latitude > 90 || isNaN(newLocation.latitude) ||
-            isNaN(newLocation.longitude)) {
-            console.error(`BP ${bp.owner} - Invalid Location >>> `, location)
-          } else {
-            const key = `${bp.owner}-${index}`
-            markers.push(this.renderMarker(key, bp, newLocation.name, newLocation.country, newLocation.latitude, newLocation.longitude))
-          }
+        locations.forEach((newLocation, index) => {
+          const key = `${bp.owner}-${index}`
+          markers.push(this.renderMarker(key, bp,
+            newLocation.name, newLocation.country,
+            newLocation.latitude, newLocation.longitude
+          ))
         })
       })
 
     return markers
+  }
+
+  unknownBps() {
+
+    const producers = []
+
+    this.state.bps.forEach(bp => {
+      if (!bp.json) {
+        producers.push(bp)
+      } else {
+        const locations = this.parseBpLocations(bp)
+        if (!locations.length) {
+          producers.push(bp)
+        }
+      }
+    })
+
+    return producers.length > 0 ? (
+      <div className="box unknown-bps">
+        <p><strong className="has-text-danger">Producers Not Located</strong></p>
+        <ul>
+          {producers.map((bp, index) => (
+            <li key={`unknown-bp-${index}`}>
+              <Link to={`/bp/${bp.owner}`}>{bp.owner}</Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ) : null
   }
 
   render() {
@@ -254,6 +300,7 @@ class BpMain extends Component {
           doSearch={this.refreshData}
           position={match.params.position || 'top50' }
           filter={match.params.filter || 'main' } />
+        {this.unknownBps()}
         <Map
           // eslint-disable-next-line
           style={MAPBOX_STYLE}

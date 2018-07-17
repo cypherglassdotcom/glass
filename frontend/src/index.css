@@ -9,3 +9,15 @@ body {
 .has-margin-top {
   margin-top: 20px;
 }
+
+.button.is-purple {
+  background-color: #3B5998;
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-orange {
+  background-color: #ff4500;
+  border-color: transparent;
+  color: #fff;
+}

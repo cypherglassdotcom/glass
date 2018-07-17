@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Box from '../components/Box'
 import { getBp } from '../lib/bpsApi'
+import SocialButton from '../components/SocialButton'
 import moment from 'moment'
 
 import './BpDetails.css'
@@ -32,20 +33,53 @@ class BpDetails extends Component {
       })
   }
 
+  renderSocial(social) {
+    if (!social)
+      return null
+
+    return (
+      <div>
+        <p><strong>Social Media:</strong></p>
+        <p className="buttons">
+          {social.telegram && <SocialButton type='telegram' handle={social.telegram} />}
+          {social.steemit && <SocialButton type='steemit' handle={social.steemit} />}
+          {social.twitter && <SocialButton type='twitter' handle={social.twitter} />}
+          {social.youtube && <SocialButton type='youtube' handle={social.youtube} />}
+          {social.github && <SocialButton type='github' handle={social.github} />}
+          {social.facebook && <SocialButton type='facebook' handle={social.facebook} />}
+          {social.reddit && <SocialButton type='reddit' handle={social.reddit} />}
+          {social.keybase && <SocialButton type='keybase' handle={social.keybase} />}
+          {social.wechat && <SocialButton type='wechat' handle={social.wechat} />}
+          {!social.telegram && !social.facebook && !social.twitter && !social.youtube &&
+            !social.github && !social.steemit && !social.reddit && !social.keybase && !social.wechat ?
+            'No Social Media presence' : null}
+        </p>
+      </div>
+    )
+  }
+
   render() {
     const { match: {params: { account }} } = this.props
     const { bpData } = this.state
-    const { json: { org, nodes } } = bpData
+    const { json } = bpData
+
+    console.log('this is json', json)
+
+    const { org, nodes } = json || {}
 
     const lastUpdatedAt = moment(bpData.updatedAt).format('MMMM Do YYYY, h:mm:ss a')
+
+    const bpTitle = (org && org.candidate_name) || account
+
+    console.log(bpTitle)
 
     return (
       <section className="container has-margin-top">
         <div>
           { org && org.branding && org.branding.logo_256 &&
-            <img className="img-logo" src={org.branding.logo_256} /> }
+            <img className="img-logo" src={org.branding.logo_256} alt={bpTitle} /> }
           <div className="details-header">
-            <h1 className="title is-4">{(org && org.candidate_name) || account}</h1>
+            <h1 className="title is-4">{bpTitle}</h1>
             <span><strong>EOS Account:</strong> {bpData.owner}</span>
             <span><strong>URL:</strong>
               {' '}
@@ -59,41 +93,24 @@ class BpDetails extends Component {
         <Box className="details-info">
           <h2 className="title is-5">Block Producer Info</h2>
           {!org ? <p>This block producer has no further details information. (Fail to retrieve bp.json file)</p>
-          : <div className="columns">
-              <div className="column is-two-thirds">
-                {org.location &&
-                  <p><strong>Main Location:</strong><br/> {org.location.name}, {org.location.country}</p>}
-                {org.email &&
-                  <p><strong>Email:</strong><br/> <a href={`mailto:${org.email}`}>{org.email}</a></p>}
-                {org.website &&
-                  <p><strong>Website:</strong><br/> <a href={org.website} target="_blank">{org.website}</a></p>}
-                {org.code_of_conduct &&
-                  <p><strong>Code of Conduct:</strong><br/> <a href={org.code_of_conduct} target="_blank">{org.code_of_conduct}</a></p>}
-                {org.ownership_disclosure &&
-                  <p><strong>Ownership Disclosure:</strong><br/> <a href={org.ownership_disclosure} target="_blank">{org.ownership_disclosure}</a></p>}
-              </div>
-              {org.social ?
+          : <div>
+              <div className="columns">
                 <div className="column">
-                    {org.social.telegram &&
-                      <p><strong>Telegram:</strong><br/> <a href={`https://t.me/${org.social.telegram}`} target="_blank">{org.social.telegram}</a></p>}
-                    {org.social.facebook &&
-                      <p><strong>Facebook:</strong><br/> <a href={`https://www.facebook.com/${org.social.facebook}`} target="_blank">{org.social.facebook}</a></p>}
-                    {org.social.twitter &&
-                      <p><strong>Twitter:</strong><br/> <a href={`https://twitter.com/${org.social.twitter}`} target="_blank">{org.social.twitter}</a></p>}
-                    {org.social.youtube &&
-                      <p><strong>YouTube:</strong><br/> <a href={`https://www.youtube.com/${org.social.youtube}`} target="_blank">{org.social.youtube}</a></p>}
-                    {org.social.github &&
-                      <p><strong>GitHub:</strong><br/> <a href={`https://github.com/${org.social.github}`} target="_blank">{org.social.github}</a></p>}
-                    {org.social.steemit &&
-                      <p><strong>Steemit:</strong><br/> <a href={`https://steemit.com/@${org.social.steemit}`} target="_blank">{org.social.steemit}</a></p>}
-                    {org.social.reddit &&
-                      <p><strong>Reddit:</strong><br/> <a href={`https://reddit.com/u/${org.social.reddit}`} target="_blank">{org.social.reddit}</a></p>}
-                    {org.social.keybase &&
-                      <p><strong>Keybase:</strong><br/> <a href={`https://keybase.io/${org.social.keybase}`} target="_blank">{org.social.keybase}</a></p>}
-                    {org.social.wechat &&
-                      <p><strong>WeChat:</strong><br/> <a href={`https://www.wechat.com/${org.social.wechat}`} target="_blank">{org.social.wechat}</a></p>}
+                  {org.location &&
+                    <p><strong>Main Location:</strong><br/> {org.location.name}, {org.location.country}</p>}
+                  {org.email &&
+                    <p><strong>Email:</strong><br/> <a href={`mailto:${org.email}`}>{org.email}</a></p>}
+                  {org.website &&
+                    <p><strong>Website:</strong><br/> <a href={org.website} target="_blank">{org.website}</a></p>}
                 </div>
-                : null}
+                <div className="column">
+                  {org.code_of_conduct &&
+                    <p><strong>Code of Conduct:</strong><br/> <a href={org.code_of_conduct} target="_blank">{org.code_of_conduct}</a></p>}
+                  {org.ownership_disclosure &&
+                    <p><strong>Ownership Disclosure:</strong><br/> <a href={org.ownership_disclosure} target="_blank">{org.ownership_disclosure}</a></p>}
+                  {this.renderSocial(org.social)}
+                </div>
+              </div>
             </div> }
         </Box>
 
