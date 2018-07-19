@@ -25,7 +25,6 @@ class BpMain extends Component {
     this.state = {
       bps: [],
       totalBps: 0,
-      search: null,
       selectedBp: null,
       hoveredBp: null,
       mapCenter: [0,50],
@@ -39,7 +38,6 @@ class BpMain extends Component {
     const { match: { params: { position: currentPosition, filter: currentFilter } } } = this.props
 
     if (prevPosition !== currentPosition || prevFilter !== currentFilter) {
-      console.log('new position route')
       this.refreshData()
     }
   }

@@ -16,6 +16,15 @@ class BpTopMenu extends Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    const { filter: prevFilter, position: prevPosition } = prevProps
+    const { filter: currentFilter, position: currentPosition } = this.props
+
+    if (prevPosition !== currentPosition || prevFilter !== currentFilter) {
+      this.setState({search: ''})
+    }
+  }
+
   menuItem(type, text, action) {
     const { filter, position } = this.props
 
@@ -69,6 +78,7 @@ class BpTopMenu extends Component {
                 <p className="control">
                   <input
                     className="input is-small"
+                    value={search}
                     onChange={(e) => this.setState({search: e.target.value})}
                     onKeyPress={({key}) => key === 'Enter' ? doSearch(search) : null}
                     type="text"
