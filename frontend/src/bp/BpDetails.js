@@ -89,6 +89,7 @@ class BpDetails extends Component {
             <span><strong>Last Updated At:</strong> {lastUpdatedAt}</span>
             <br/>
             <span><strong>EOS Public Key:</strong> {bpData.producer_key}</span>
+            <span><a href={`${bpData.url}/bp.json`} target="_blank">BP JSON File</a></span>
           </div>
         </div>
         <Box className="details-info">
