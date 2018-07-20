@@ -5,6 +5,7 @@ import SocialButton from '../components/SocialButton'
 import moment from 'moment'
 
 import './BpDetails.css'
+import { capitalize } from '../lib/misc';
 
 class BpDetails extends Component {
 
@@ -125,16 +126,15 @@ class BpDetails extends Component {
                   <th>API Endpoint</th>
                   <th>SSL Endpoint</th>
                   <th>P2P Endpoint</th>
+                  <th>BNET Endpoint</th>
                 </tr>
               </thead>
               <tbody>
                 { nodes.map((node, index) => {
                   return <tr key={`node-${index}`}>
                     <td>
-                      {node.is_producer || node.node_type === 'producer' ?
-                      'Producer' :
-                      (node.node_type === 'full' || node.is_producer === false) ?
-                      'Full' : node.node_type || 'Unknown'}
+                      {node.node_type ? capitalize(node.node_type) :
+                        node.is_producer ? 'Producer' : 'Unknown'}
                     </td>
                     <td>
                       {node.location && node.location.name ?
@@ -157,6 +157,9 @@ class BpDetails extends Component {
                     </td>
                     <td>
                       {node.p2p_endpoint || '-'}
+                    </td>
+                    <td>
+                      {node.bnet_endpoint || '-'}
                     </td>
                   </tr>
                 }) }
