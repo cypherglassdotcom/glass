@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import Box from '../components/Box'
 import { getBp } from '../lib/bpsApi'
 import SocialButton from '../components/SocialButton'
@@ -89,7 +90,8 @@ class BpDetails extends Component {
             <span><strong>Last Updated At:</strong> {lastUpdatedAt}</span>
             <br/>
             <span><strong>EOS Public Key:</strong> {bpData.producer_key}</span>
-            <span><a href={`${bpData.url}/bp.json`} target="_blank">BP JSON File</a></span>
+            <br/>
+            <span><strong>Block Producer Data File:</strong> <a href={`${bpData.url}/bp.json`} target="_blank">BP JSON File</a></span>
           </div>
         </div>
         <Box className="details-info">
@@ -117,7 +119,7 @@ class BpDetails extends Component {
         </Box>
 
         <div className="has-margin-top">
-          <h2 className="title is-5">Nodes List</h2>
+          <h2 className="title is-5">Nodes List <small><Link to={`/map/all/all?search=${bpData.owner}`}>View Nodes in Main Map</Link></small></h2>
           {!nodes || !nodes.length ? <p>This Block Producer has no listed nodes</p> :
             <table className="table is-striped is-hoverable is-fullwidth">
               <thead>

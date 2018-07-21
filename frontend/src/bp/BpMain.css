@@ -14,10 +14,25 @@
   top: 15px;
 }
 
+.map-keys.box {
+  width: 240px;
+  height: 100px;
+  right: 2%;
+  margin-top: 105px;
+  z-index: 100;
+  position: absolute;
+}
+
+.map-keys.box img {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+}
+
 .unknown-bps.box {
   width: 240px;
   right: 2%;
-  margin-top: 105px;
+  margin-top: 215px;
   z-index: 100;
   position: absolute;
 }

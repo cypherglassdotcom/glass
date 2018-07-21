@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom'
 import ReactMapboxGl, { Marker, Popup } from 'react-mapbox-gl'
 import BpTopMenu from './BpTopMenu'
 import './BpMain.css';
-import markerImg from '../assets/new-pin.svg'
+import markerMainImg from '../assets/marker-main.svg'
+import markerProducerImg from '../assets/marker-producer.svg'
+import markerOtherImg from '../assets/marker-other.svg'
 import { listBps, countBps } from '../lib/bpsApi'
+import qs from 'query-string'
 
 const Map = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPBOX_TOKEN
@@ -43,11 +46,17 @@ class BpMain extends Component {
   }
 
   componentDidMount() {
-    this.refreshData()
+    const { location } = this.props
+    const query = location.search ? qs.parse(location.search) : {}
+    this.refreshData(query.search)
   }
 
   refreshData(search) {
-    const { match: {params: { position } } } = this.props
+    const { match: {params: { position } }, history, location } = this.props
+
+    if (search)
+      history.push(`${location.pathname}?search=${search}`, this.state)
+
     this.setState({isLoading: true, selectedBp: null})
 
     let limit = 0
@@ -91,28 +100,29 @@ class BpMain extends Component {
             .map(n => n.location)
             .forEach(location => {
               if (location && location.latitude && location.longitude) {
-                locations.push(location)
+                locations.push({...location, type: 'producer'})
               }
             })
         }
         break;
 
       case 'all':
-        // add main location
-        const { json: { org: { location: mainLocation } } } = bp
-        if (mainLocation && mainLocation.latitude && mainLocation.longitude) {
-          locations.push(mainLocation)
-        }
-
         // add all nodes
         const { json: { nodes: allNodes } } = bp
         if (allNodes && allNodes.length) {
-          allNodes.map(n => n.location)
-            .forEach(location => {
-              if (location && location.latitude && location.longitude) {
-                locations.push(location)
+          allNodes.forEach(node => {
+              if (node.location && node.location.latitude && node.location.longitude) {
+                locations.push({...node.location,
+                  type: node.is_producer || node.node_type === 'producer'
+                  ? 'producer' : 'other'})
               }
             })
+        }
+
+        // add main location
+        const { json: { org: { location: mainLocation } } } = bp
+        if (mainLocation && mainLocation.latitude && mainLocation.longitude) {
+          locations.push({...mainLocation, type: 'main'})
         }
         break;
 
@@ -120,7 +130,7 @@ class BpMain extends Component {
         // add main location
         const { json: { org: { location } } } = bp
         if (location && location.latitude && location.longitude) {
-          locations.push(location)
+          locations.push({...location, type: 'main'})
         }
     }
 
@@ -219,8 +229,12 @@ class BpMain extends Component {
     )
   }
 
-  renderMarker(key, bp, name, country, lat, lon) {
+  renderMarker(key, bp, name, country, lat, lon, type) {
     const coordinates = [lon, lat]
+
+    const markerImg = type === 'main' ? markerMainImg
+      : type === 'producer' ? markerProducerImg
+      : markerOtherImg
 
     return (
       <Marker
@@ -249,12 +263,25 @@ class BpMain extends Component {
           const key = `${bp.owner}-${index}`
           markers.push(this.renderMarker(key, bp,
             newLocation.name, newLocation.country,
-            newLocation.latitude, newLocation.longitude
+            newLocation.latitude, newLocation.longitude,
+            newLocation.type
           ))
         })
       })
 
     return markers
+  }
+
+  mapKeysInfo() {
+    return (
+      <div className="box map-keys">
+        <ul>
+          <li><img src={markerMainImg} alt={"Main Location"} /> Main Location</li>
+          <li><img src={markerProducerImg} alt={"Producer Node"} /> Producer Node</li>
+          <li><img src={markerOtherImg} alt={"Others Nodes"} /> Others Nodes</li>
+        </ul>
+      </div>
+    )
   }
 
   unknownBps() {
@@ -298,6 +325,7 @@ class BpMain extends Component {
           doSearch={this.refreshData}
           position={match.params.position || 'top50' }
           filter={match.params.filter || 'main' } />
+        {this.mapKeysInfo()}
         {this.unknownBps()}
         <Map
           // eslint-disable-next-line

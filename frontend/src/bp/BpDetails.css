@@ -20,3 +20,9 @@
 .details-info p {
   margin-bottom: 10px;
 }
+
+h2.title.is-5 small {
+  font-size: 16px;
+  font-weight: 400;
+  margin-left: 10px;
+}

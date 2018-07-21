@@ -20,8 +20,10 @@ class Navbar extends React.Component {
     return (
       <nav aria-label="main navigation" className="navbar NavbarCg">
         <div className="navbar-brand logo">
-          <img className="logo-img" src={logo} alt="Cypherglass GLASS" />
-          <span className="title-span">GLASS</span>
+          <Link to='/'>
+            <img className="logo-img" src={logo} alt="Cypherglass GLASS" />
+            <span className="title-span">GLASS</span>
+          </Link>
         </div>
         <div className="navbar-menu">
           <div className="navbar-end">
