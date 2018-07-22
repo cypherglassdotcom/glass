@@ -14,6 +14,33 @@ Bringing the transparency of EOS Bps!
 2 - Build backend and serve with pm2
 3 - Build the frontend and serve it in your static webserver
 
+### Backend Setup
+
+First time install (setting up pm2)
+```
+npm install pm2 -g
+cd backend
+npm install
+npm run build
+cd dist
+pm2 start index.js
+```
+
+Subsequential deployments:
+```
+cd backend
+npm install
+npm run build
+pm2 restart 0         # assuming your pm2 installation above added glass service with id 0
+```
+
+### Frontend Setup
+
+```
+cd frontend
+npm run build && sudo rm -rf /var/www/html && sudo mv build /var/www/html
+```
+
 ## Misc
 
 ### Apache config file
