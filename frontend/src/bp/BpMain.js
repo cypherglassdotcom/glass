@@ -25,10 +25,12 @@ class BpMain extends Component {
   constructor(props) {
     super(props)
     this.refreshData = this.refreshData.bind(this)
+    this.doSearch = this.doSearch.bind(this)
     this.state = {
       bps: [],
       totalBps: 0,
       selectedBp: null,
+      search: null,
       hoveredBp: null,
       mapCenter: [0,50],
       mapZoom: [1],
@@ -48,11 +50,16 @@ class BpMain extends Component {
   componentDidMount() {
     const { location } = this.props
     const query = location.search ? qs.parse(location.search) : {}
-    this.refreshData(query.search)
+    return query.search ? this.doSearch(query.search) : this.refreshData()
   }
 
-  refreshData(search) {
+  doSearch(search) {
+    this.setState({search}, this.refreshData)
+  }
+
+  refreshData() {
     const { match: {params: { position } }, history, location } = this.props
+    const { search } = this.state
 
     if (search)
       history.push(`${location.pathname}?search=${search}`, this.state)
@@ -314,7 +321,7 @@ class BpMain extends Component {
   }
 
   render() {
-    const { mapCenter, mapZoom, totalBps, bps } = this.state
+    const { mapCenter, mapZoom, totalBps, bps, search } = this.state
     const { match } = this.props
 
     return (
@@ -322,7 +329,9 @@ class BpMain extends Component {
         <BpTopMenu
           totalBps={totalBps}
           countBps={bps.length}
-          doSearch={this.refreshData}
+          doSearch={this.doSearch}
+          clearSearch={()=>this.setState({search: null}, this.refreshData)}
+          search={search}
           position={match.params.position || 'top50' }
           filter={match.params.filter || 'main' } />
         {this.mapKeysInfo()}

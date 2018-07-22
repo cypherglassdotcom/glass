@@ -63,7 +63,7 @@ class BpTopMenu extends Component {
   }
 
   render() {
-    const { totalBps, countBps, doSearch } = this.props
+    const { totalBps, countBps, doSearch, clearSearch, search: searchTxt } = this.props
     const { search } = this.state
 
     return (
@@ -71,26 +71,31 @@ class BpTopMenu extends Component {
         <Level>
           <LevelLeft>
             <LevelItem>
-              <p>{countBps} of {totalBps} Reg. Block Producers</p>
+              {searchTxt ?
+                <p>Searching for <strong>{searchTxt}</strong> <a onClick={clearSearch}><i className="fa fa-times"></i></a></p> :
+                <p>{countBps} of {totalBps} Reg. Block Producers</p>
+              }
             </LevelItem>
-            <LevelItem>
-              <div className="field has-addons">
-                <p className="control">
-                  <input
-                    className="input is-small"
-                    value={search}
-                    onChange={(e) => this.setState({search: e.target.value})}
-                    onKeyPress={({key}) => key === 'Enter' ? doSearch(search) : null}
-                    type="text"
-                    placeholder="Find a Producer" />
-                </p>
-                <p className="control">
-                  <button onClick={() => doSearch(search)} className="button is-small">
-                    Search
-                  </button>
-                </p>
-              </div>
-            </LevelItem>
+            { !searchTxt &&
+              <LevelItem>
+                <div className="field has-addons">
+                  <p className="control">
+                    <input
+                      className="input is-small"
+                      value={search}
+                      onChange={(e) => this.setState({search: e.target.value})}
+                      onKeyPress={({key}) => key === 'Enter' ? doSearch(search) : null}
+                      type="text"
+                      placeholder="Find a Producer" />
+                  </p>
+                  <p className="control">
+                    <button onClick={() => doSearch(search)} className="button is-small">
+                      Search
+                    </button>
+                  </p>
+                </div>
+              </LevelItem>
+            }
             {this.renderFilterMenu()}
           </LevelLeft>
           <LevelRight>
