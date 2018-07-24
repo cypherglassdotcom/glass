@@ -15,10 +15,10 @@
 }
 
 .map-keys.box {
-  width: 240px;
+  width: 280px;
   height: 100px;
-  right: 2%;
-  margin-top: 105px;
+  left: 2%;
+  bottom: 2%;
   z-index: 100;
   position: absolute;
 }
@@ -32,7 +32,7 @@
 .unknown-bps.box {
   width: 240px;
   right: 2%;
-  margin-top: 215px;
+  margin-top: 110px;
   z-index: 100;
   position: absolute;
 }

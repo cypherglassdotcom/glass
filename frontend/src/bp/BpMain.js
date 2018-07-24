@@ -285,7 +285,7 @@ class BpMain extends Component {
         <ul>
           <li><img src={markerMainImg} alt={"Main Location"} /> Main Location</li>
           <li><img src={markerProducerImg} alt={"Producer Node"} /> Producer Node</li>
-          <li><img src={markerOtherImg} alt={"Others Nodes"} /> Others Nodes</li>
+          <li><img src={markerOtherImg} alt={"Others (Full/Query/Seed)"} /> Others (Full/Query/Seed)</li>
         </ul>
       </div>
     )

@@ -4,17 +4,41 @@ const About = () => (
   <section className="has-margin-top">
     <div className="container">
       <div className="content">
-        <h1 className="is-title">About GLASS</h1>
+        <h1 className="is-title">Cypheglass Glass Version 1.0</h1>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis ante et felis ornare, rhoncus euismod purus malesuada. Duis magna ipsum, convallis vitae elit iaculis, efficitur faucibus neque. Praesent mauris leo, rutrum eu suscipit non, molestie vitae leo. Suspendisse commodo malesuada volutpat. Aliquam fringilla sem sem. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Pellentesque ac neque ac arcu vulputate feugiat. Mauris porta tempor tincidunt. Donec a ultrices enim.
+          Glass is an open source tool that enables all EOS Block Producers to
+          publicly disclose and manage their ownership interests and infrastructure
+          via a dApp on the EOS blockchain. At Cypherglass we are all about transparency
+          on the EOS network, and our goal is to ensure the EOS network stays free from
+          corruption and centralization.
         </p>
-
         <p>
-          Pellentesque vitae odio euismod, porta felis vitae, molestie ligula. Praesent convallis dignissim sapien sit amet dictum. Donec sit amet ornare elit, ut iaculis elit. Ut ac luctus arcu. Fusce metus est, maximus vel enim finibus, facilisis porta urna. Maecenas ultricies lorem elit, vel porttitor urna gravida vitae. Donec nec libero orci. Donec fringilla, enim vel sollicitudin mattis, mi lorem interdum metus, vitae fringilla sem urna eu diam. Duis risus mauris, mattis id commodo non, tempor sed sapien. Sed eu nisl eget lacus commodo rhoncus sed id ligula. Sed nec quam vehicula, euismod diam sed, convallis lorem. Pellentesque volutpat maximus elit ac blandit. Duis ante orci, ultricies lacinia magna in, faucibus dignissim sem.
+          Currently we are in phase one of Glass.  This phase is designed to enable the
+          EOS community to obtain a transparent, graphical view of block producer
+          information, and for block producers to verify the information they provide the
+          EOS community in their bp.json file as linked in the blockchain data.  The bp.json
+          file is essentially an info/configuration file that is provided by each block
+          producer.  As you view block producers using Glass, if information is missing, it’s
+          because the block producer has incorrect or missing information in their bp.json file.
+          You can click on the details of a specific block producer within Glass and see their
+          actual bp.json like this one:{' '}
+          <a href="https://www.cypherglass.com/bp.json" target="_blank">https://www.cypherglass.com/bp.json</a>
         </p>
-
         <p>
-          Pellentesque semper risus sit amet massa ultrices, id rhoncus nisl cursus. Nam turpis est, fermentum nec semper et, vestibulum vel massa. Etiam fringilla turpis ac est finibus suscipit. Sed vitae suscipit lorem. Vestibulum id lectus quis turpis interdum varius a eget urna. Nam id rutrum erat, nec mattis orci. Phasellus ultrices, velit ac tempor varius, sem velit fringilla diam, ut molestie ipsum urna in ex. Proin ut odio nec mauris mollis dictum. Morbi id magna ut purus ultricies accumsan.
+          Phase two will be released in August, and will enable EOS block producers to provide
+          voluntary information about their business. Some of these fields include ownership
+          structure, infrastructure, and additional additional node information.  You can view
+          more information about the phases of Glass here:{' '}
+          <a href="https://steemit.com/eos/@cypherglass/update-glass-a-tool-to-protect-the-eos-network-from-corruption-and-collusion" target="_blank">
+          https://steemit.com/eos/@cypherglass/update-glass-a-tool-to-protect-the-eos-network-from-corruption-and-collusion</a>
+          .
+        </p>
+        <p>
+          The Glass code is on our GitHub repository here:{' '}
+          <a href="https://github.com/cypherglassdotcom/glass" target="_blank">https://github.com/cypherglassdotcom/glass</a>.
+          Please feel free to leave upgrade suggestions, log bugs, or use the code yourself. You can also find
+          us on Telegram here <a href="https://t.me/cypherglass" target="_blank">https://t.me/cypherglass</a> or visit our
+          website at <a href="https://www.cypherglass.com" target="_blank">https://www.cypherglass.com</a>.
         </p>
       </div>
     </div>
