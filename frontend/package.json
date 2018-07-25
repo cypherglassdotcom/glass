@@ -8,6 +8,7 @@
     "moment": "^2.22.2",
     "query-string": "^6.1.0",
     "react": "^16.4.1",
+    "react-device-detect": "^1.5.8",
     "react-dom": "^16.4.1",
     "react-mapbox-gl": "^3.8.0",
     "react-router-dom": "^4.3.1",
