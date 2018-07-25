@@ -7,7 +7,7 @@ import markerMainImg from '../assets/marker-main.svg'
 import markerProducerImg from '../assets/marker-producer.svg'
 import markerOtherImg from '../assets/marker-other.svg'
 import { listBps, countBps } from '../lib/bpsApi'
-import qs from 'query-string'
+import qs from 'qs'
 
 const Map = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPBOX_TOKEN
