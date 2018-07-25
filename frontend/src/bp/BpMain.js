@@ -49,8 +49,10 @@ class BpMain extends Component {
 
   componentDidMount() {
     const { location } = this.props
+    console.log(location.search,  qs.parse(location.search))
     const query = location.search ? qs.parse(location.search) : {}
-    return query.search ? this.doSearch(query.search) : this.refreshData()
+    const search = query["?search"] || query.search
+    return search ? this.doSearch(search) : this.refreshData()
   }
 
   doSearch(search) {
