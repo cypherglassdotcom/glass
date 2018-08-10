@@ -63,7 +63,7 @@ class BpTopMenu extends Component {
   }
 
   render() {
-    const { totalBps, countBps, doSearch, clearSearch, search: searchTxt } = this.props
+    const { totalBps, countBps, doSearch, clearSearch, search: searchTxt, mobileClose } = this.props
     const { search } = this.state
 
     return (
@@ -102,6 +102,9 @@ class BpTopMenu extends Component {
             {this.renderPositionMenu()}
           </LevelRight>
         </Level>
+        { mobileClose ? <p>
+          <a onClick={() => mobileClose()}>Close</a>
+        </p> : null }
       </Box>
     );
   }

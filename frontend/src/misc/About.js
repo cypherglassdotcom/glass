@@ -2,9 +2,9 @@ import React from 'react'
 
 const About = () => (
   <section className="has-margin-top">
-    <div className="container">
+    <div className="container mobile-container">
       <div className="content">
-        <h1 className="is-title">Cypheglass Glass Version 1.0</h1>
+        <h1 className="is-title">Cypherglass Glass Version 1.1</h1>
         <p>
           Glass is an open source tool that enables all EOS Block Producers to
           publicly disclose and manage their ownership interests and infrastructure

@@ -16,7 +16,13 @@
 
 .map-keys.box {
   width: 280px;
-  height: 100px;
+  left: 2%;
+  bottom: 2%;
+  z-index: 100;
+  position: absolute;
+}
+
+.map-keys-mobile-button {
   left: 2%;
   bottom: 2%;
   z-index: 100;

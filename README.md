@@ -16,6 +16,13 @@ Bringing the transparency of EOS Bps!
 
 ### Backend Setup
 
+First time running `bpwatcher` prior the cronjob:
+```
+cd bpwatcher
+npm install
+node index.js
+```
+
 First time install (setting up pm2)
 ```
 npm install pm2 -g

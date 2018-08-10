@@ -14,12 +14,26 @@
   margin-right: 10px;
 }
 
+.details-header p {
+  margin-top: 10px;
+}
+
 .details-header {
-  height: 120px;
+  min-height: 120px;
+}
+
+.details-info {
+  margin: 10px;
+  word-wrap: break-word;
 }
 
 .details-info p {
   margin-bottom: 10px;
+}
+
+.nodes-list {
+  margin: 10px;
+  word-wrap: break-word;
 }
 
 h2.title.is-5 small {

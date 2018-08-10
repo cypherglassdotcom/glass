@@ -8,6 +8,7 @@ import markerProducerImg from '../assets/marker-producer.svg'
 import markerOtherImg from '../assets/marker-other.svg'
 import { listBps, countBps } from '../lib/bpsApi'
 import qs from 'qs'
+import { isMobile } from 'react-device-detect'
 
 const Map = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPBOX_TOKEN
@@ -16,8 +17,8 @@ const Map = ReactMapboxGl({
 const MAPBOX_STYLE = process.env.REACT_APP_MAPBOX_STYLE
 
 const MAP_STYLE = {
-  height: 'calc(100vh - 114px)',
-  width: "100vw"
+  height: isMobile ? 'calc(100vh - 70px)' :  'calc(100vh - 114px)',
+  width: '100vw'
 }
 
 class BpMain extends Component {
@@ -34,7 +35,11 @@ class BpMain extends Component {
       hoveredBp: null,
       mapCenter: [0,50],
       mapZoom: [1],
-      isLoading: false
+      unknownBps: [],
+      isLoading: false,
+      mobileShowIcons: false,
+      mobileShowMenu: false,
+      mobileShowUnknowns: false
     }
   }
 
@@ -56,7 +61,7 @@ class BpMain extends Component {
   }
 
   doSearch(search) {
-    this.setState({search}, this.refreshData)
+    this.setState({search, mobileShowMenu: false}, this.refreshData)
   }
 
   refreshData() {
@@ -79,7 +84,22 @@ class BpMain extends Component {
 
     listBps(limit, search)
       .then(data => {
-        this.setState({bps: data, isLoading: false})
+        
+        // calculate unknown bps
+        const unknownBps = []
+        data.forEach(bp => {
+          if (!bp.json) {
+            unknownBps.push(bp)
+          } else {
+            const locations = this.parseBpLocations(bp)
+            if (!locations.length) {
+              unknownBps.push(bp)
+            }
+          }
+        })
+        
+        this.setState({bps: data, unknownBps, isLoading: false})
+
       }).catch(err => {
         alert((err && err.error && err.error.message) || err || 'Uknown error listing bps')
       })
@@ -282,60 +302,72 @@ class BpMain extends Component {
   }
 
   mapKeysInfo() {
-    return (
+    return !isMobile || this.state.mobileShowIcons ? 
       <div className="box map-keys">
         <ul>
           <li><img src={markerMainImg} alt={"Main Location"} /> Main Location</li>
           <li><img src={markerProducerImg} alt={"Producer Node"} /> Producer Node</li>
           <li><img src={markerOtherImg} alt={"Others (Full/Query/Seed)"} /> Others (Full/Query/Seed)</li>
+          {isMobile ? <li><a onClick={() => this.setState({mobileShowIcons: false})}>Close</a></li> : null}
         </ul>
-      </div>
-    )
+      </div> : null
   }
 
   unknownBps() {
 
-    const producers = []
+    const { unknownBps, mobileShowUnknowns } = this.state
 
-    this.state.bps.forEach(bp => {
-      if (!bp.json) {
-        producers.push(bp)
-      } else {
-        const locations = this.parseBpLocations(bp)
-        if (!locations.length) {
-          producers.push(bp)
-        }
-      }
-    })
-
-    return producers.length > 0 ? (
+    return (!isMobile || mobileShowUnknowns) && unknownBps.length > 0 ? (
       <div className="box unknown-bps">
         <p><strong className="has-text-danger">Producers Not Located</strong></p>
         <ul>
-          {producers.map((bp, index) => (
+          {unknownBps.map((bp, index) => (
             <li key={`unknown-bp-${index}`}>
               <Link to={`/bp/${bp.owner}`}>{bp.owner}</Link>
             </li>
           ))}
         </ul>
+        {isMobile ? <a onClick={() => this.setState({mobileShowUnknowns: false})}>Close</a> : null}
       </div>
     ) : null
   }
 
+  mobileMenu() {
+    const { mobileShowIcons, mobileShowMenu, mobileShowUnknowns, unknownBps } = this.state
+    return isMobile && !mobileShowIcons && !mobileShowMenu && !mobileShowUnknowns ? 
+      <div className="map-keys-mobile-button buttons">
+        <a className="button is-info" onClick={() => this.setState({mobileShowIcons: true})}>
+          <i className="fa fa-question-circle"></i>
+        </a>
+        <a className="button is-success" onClick={() => this.setState({mobileShowMenu: true})}>
+          <i className="fa fa-list"></i>
+        </a>
+        { unknownBps.length > 0 ?
+        <a className="button is-danger" onClick={() => this.setState({mobileShowUnknowns: true})}>
+          <i className="fa fa-exclamation"></i>
+          <span style={{marginLeft: 5}}>{unknownBps.length}</span>
+        </a> : null }
+        <Link className="button" to="/about">About Glass</Link>
+      </div> : null
+  }
+
   render() {
-    const { mapCenter, mapZoom, totalBps, bps, search } = this.state
+    const { mapCenter, mapZoom, totalBps, bps, search, mobileShowMenu } = this.state
     const { match } = this.props
 
     return (
       <section>
+        {this.mobileMenu()}
+        { !isMobile || mobileShowMenu ? 
         <BpTopMenu
           totalBps={totalBps}
           countBps={bps.length}
           doSearch={this.doSearch}
           clearSearch={()=>this.setState({search: null}, this.refreshData)}
           search={search}
+          mobileClose={isMobile ? ()=>this.setState({mobileShowMenu: false}) : null}
           position={match.params.position || 'top50' }
-          filter={match.params.filter || 'main' } />
+          filter={match.params.filter || 'main' } /> : null }
         {this.mapKeysInfo()}
         {this.unknownBps()}
         <Map

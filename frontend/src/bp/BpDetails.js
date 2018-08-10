@@ -4,6 +4,7 @@ import Box from '../components/Box'
 import { getBp } from '../lib/bpsApi'
 import SocialButton from '../components/SocialButton'
 import moment from 'moment'
+import { isMobile } from 'react-device-detect'
 
 import './BpDetails.css'
 import { capitalize } from '../lib/misc';
@@ -75,25 +76,62 @@ class BpDetails extends Component {
 
     console.log(bpTitle)
 
+    const logo = org && org.branding && org.branding.logo_256 &&
+      <img className="img-logo" src={org.branding.logo_256} alt={bpTitle} />
+
     return (
       <section className="container has-margin-top">
-        <div>
-          { org && org.branding && org.branding.logo_256 &&
-            <img className="img-logo" src={org.branding.logo_256} alt={bpTitle} /> }
-          <div className="details-header">
-            <h1 className="title is-4">{bpTitle}</h1>
-            <span><strong>EOS Account:</strong> {bpData.owner}</span>
-            <span><strong>URL:</strong>
-              {' '}
-              <a href={bpData.url} target="_blank">{bpData.url}</a>
-            </span>
-            <span><strong>Last Updated At:</strong> {lastUpdatedAt}</span>
-            <br/>
-            <span><strong>EOS Public Key:</strong> {bpData.producer_key}</span>
-            <br/>
-            <span><strong>Block Producer Data File:</strong> <a href={`${bpData.url}/bp.json`} target="_blank">BP JSON File</a></span>
+        { isMobile ? 
+          <div>
+            <div className="details-header mobile-container">
+              <div style={{height: 120}}>
+                {logo}
+                <h1 className="title is-4">{bpTitle}</h1>
+                <span><strong>EOS Account:</strong> 
+                <br/> {bpData.owner}
+                </span>
+              </div>
+              
+              <p>
+                <strong>URL:</strong>
+                <br/>
+                <a href={bpData.url} target="_blank">{bpData.url}</a>
+              </p>
+              <p>
+                <strong>Last Updated At:</strong>
+                <br/> 
+                {lastUpdatedAt}
+              </p>
+              <p>
+                <strong>EOS Public Key:</strong> 
+                <br/>{bpData.producer_key}
+              </p>
+              <p>
+                <strong>Block Producer Data File:</strong>
+                <br/>
+                <a href={`${bpData.url}/bp.json`} target="_blank">BP JSON File</a>
+              </p>
+            </div>
           </div>
-        </div>
+        : 
+          <div>
+            { org && org.branding && org.branding.logo_256 &&
+              <img className="img-logo" src={org.branding.logo_256} alt={bpTitle} /> }
+            <div className="details-header">
+              <h1 className="title is-4">{bpTitle}</h1>
+              <span><strong>EOS Account:</strong> {bpData.owner}</span>
+              <span><strong>URL:</strong>
+                {' '}
+                <a href={bpData.url} target="_blank">{bpData.url}</a>
+              </span>
+              <span><strong>Last Updated At:</strong> {lastUpdatedAt}</span>
+              <br/>
+              <span><strong>EOS Public Key:</strong> {bpData.producer_key}</span>
+              <br/>
+              <span><strong>Block Producer Data File:</strong> <a href={`${bpData.url}/bp.json`} target="_blank">BP JSON File</a></span>
+            </div>
+          </div>
+        }
         <Box className="details-info">
           <h2 className="title is-5">Block Producer Info</h2>
           {!org ? <p>This block producer has no further details information. (Fail to retrieve bp.json file)</p>
@@ -118,7 +156,7 @@ class BpDetails extends Component {
             </div> }
         </Box>
 
-        <div className="has-margin-top">
+        <div className="has-margin-top nodes-list">
           <h2 className="title is-5">Nodes List <small><Link to={`/map/all/all?search=${bpData.owner}`}>View Nodes in Main Map</Link></small></h2>
           {!nodes || !nodes.length ? <p>This Block Producer has no listed nodes</p> :
             <table className="table is-striped is-hoverable is-fullwidth">
@@ -126,10 +164,10 @@ class BpDetails extends Component {
                 <tr>
                   <th>Type</th>
                   <th>Location</th>
-                  <th>API Endpoint</th>
-                  <th>SSL Endpoint</th>
-                  <th>P2P Endpoint</th>
-                  <th>BNET Endpoint</th>
+                  <th className="is-hidden-mobile">API Endpoint</th>
+                  <th className="is-hidden-mobile">SSL Endpoint</th>
+                  <th className="is-hidden-mobile">P2P Endpoint</th>
+                  <th className="is-hidden-mobile">BNET Endpoint</th>
                 </tr>
               </thead>
               <tbody>
@@ -144,24 +182,24 @@ class BpDetails extends Component {
                       node.location.name + ', ' + node.location.country :
                       'Unknown Location'}
                     </td>
-                    <td>
+                    <td className="is-hidden-mobile">
                       {node.api_endpoint ?
                         <a href={`${node.api_endpoint}/v1/chain/get_info`} target="_blank">
                           {node.api_endpoint}
                         </a>
                       : '-' }
                     </td>
-                    <td>
+                    <td className="is-hidden-mobile">
                       {node.ssl_endpoint ?
                         <a href={`${node.ssl_endpoint}/v1/chain/get_info`} target="_blank">
                           {node.ssl_endpoint}
                         </a>
                       : '-' }
                     </td>
-                    <td>
+                    <td className="is-hidden-mobile">
                       {node.p2p_endpoint || '-'}
                     </td>
-                    <td>
+                    <td className="is-hidden-mobile">
                       {node.bnet_endpoint || '-'}
                     </td>
                   </tr>

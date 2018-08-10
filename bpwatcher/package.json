@@ -6,7 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["eos", "eosjs", "blockchain", "block-producers"],
+  "keywords": [
+    "eos",
+    "eosjs",
+    "blockchain",
+    "block-producers"
+  ],
   "author": "Leo Ribeiro",
   "license": "MIT",
   "dependencies": {

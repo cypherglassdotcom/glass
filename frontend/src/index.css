@@ -6,6 +6,17 @@ body {
   font-family: sans-serif;
 }
 
+@media (max-width:900px) {
+  #root {
+    margin-top: -24px;
+  }
+}
+
+.mobile-container {
+  padding: 0 20px;
+  word-wrap: break-word;
+}
+
 .has-margin-top {
   margin-top: 20px;
 }

@@ -3,6 +3,12 @@
   height: 100px;
 }
 
+@media (max-width:900px) {
+  .NavbarCg {
+    height: 70px;
+  }
+}
+
 .NavbarCg .icon {
   margin-right: 2px;
 }

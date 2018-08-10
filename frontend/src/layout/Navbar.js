@@ -2,6 +2,7 @@ import React from 'react'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
 import logo from '../assets/logo.svg'
+import logoIcon from '../assets/logo-icon.png'
 import './Navbar.css'
 
 class Navbar extends React.Component {
@@ -21,7 +22,8 @@ class Navbar extends React.Component {
       <nav aria-label="main navigation" className="navbar NavbarCg">
         <div className="navbar-brand logo">
           <Link to='/'>
-            <img className="logo-img" src={logo} alt="Cypherglass GLASS" />
+            <img className="logo-img is-hidden-mobile" src={logo} alt="Cypherglass GLASS" />
+            <img className="logo-img is-hidden-tablet" src={logoIcon} alt="Cypherglass GLASS" />
             <span className="title-span">GLASS</span>
           </Link>
         </div>
@@ -33,12 +35,6 @@ class Navbar extends React.Component {
               </span>
               <span className="navbar-item-text">Map View</span>
             </Link>
-            {/* <Link to="/" className={`navbar-item ${listActive}`}>
-              <span className="icon">
-                <i className="fas fa-list"></i>
-              </span>
-              <span className="navbar-item-text">List View</span>
-            </Link> */}
             <Link to="/about" className={`navbar-item ${aboutActive}`}>
               <span className="icon">
                 <i className="fas fa-question-circle"></i>
