@@ -4,7 +4,8 @@
   "description": "Log all the registered producers data with bp.json file",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./cron"
   },
   "keywords": [
     "eos",
@@ -17,6 +18,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "commander": "^2.16.0",
-    "mongodb": "^3.1.1"
+    "human-to-cron": "^0.3.1",
+    "mongodb": "^3.1.1",
+    "node-cron": "^2.0.3"
   }
 }

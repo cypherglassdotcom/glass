@@ -1,0 +1,88 @@
+version: '3.5'
+
+services:
+
+  mongo:
+    container_name: glass_mongo
+    image: mongo
+    restart: always
+    volumes:
+      - mongo-data-volume:/data/db
+    ports:
+      - '27017:27017'
+    environment:
+      VIRTUAL_HOST: mongo.glass.cypherglass.dev
+      VIRTUAL_PORT: 27017
+    networks:
+      default:
+        aliases:
+          - mongo.glass.cypherglass.dev
+
+  admin-mongo:
+    container_name: glass_admin_mongo
+    image: mrvautin/adminmongo:latest
+    ports:
+      - '8082:8082'
+    environment:
+      PORT: 8082
+      CONN_NAME: glass
+      DB_HOST: mongo
+      VIRTUAL_HOST: admin-mongo.glass.cypherglass.dev
+      VIRTUAL_PORT: 8082
+    depends_on:
+      - mongo
+    networks:
+      default:
+        aliases:
+          - admin-mongo.glass.cypherglass.dev
+
+  bpwatcher:
+    container_name: glass_bpwatcher
+    build:
+      context: ./bpwatcher
+      dockerfile: ./Dockerfile
+    image: glass/bpwatcher
+    volumes:
+      - ./bpwatcher:/opt/application  # mount bpwatcher service folder
+      - /opt/application/node_modules # prevents host/container conflicts
+    environment:
+      WAIT_HOSTS: mongo:27017
+      WAIT_HOSTS_TIMEOUT: 60
+      MONGO_URI: mongodb://mongo:27017
+    depends_on:
+      - mongo
+
+  backend:
+    container_name: glass_backend
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    image: glass/backend
+    volumes:
+      - ./backend:/opt/application  # mount backend service folder
+      - /opt/application/node_modules # prevents host/container conflicts
+    environment:
+      WAIT_HOSTS: mongo:27017
+      WAIT_HOSTS_TIMEOUT: 60
+      MONGO_URI: mongodb://mongo:27017
+      VIRTUAL_HOST: backend.glass.cypherglass.dev
+      VIRTUAL_PORT: 8080
+    ports:
+      - '8080:8080'
+    depends_on:
+      - mongo
+
+  nginx:
+    container_name: glass_nginx
+    image: jwilder/nginx-proxy:alpine
+    ports:
+      - '80:80'
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+volumes:
+  mongo-data-volume:
+
+networks:
+  default:
+    name: glass

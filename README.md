@@ -10,9 +10,9 @@ Bringing the transparency of EOS Bps!
 
 ## Setup
 
-1 - Setup bpwatcher to run every X minutes as a cronjob.
-2 - Build backend and serve with pm2
-3 - Build the frontend and serve it in your static webserver
+1 - Setup bpwatcher to run every X minutes as a cronjob.   
+2 - Build backend and serve with pm2.     
+3 - Build the frontend and serve it in your static webserver.   
 
 ### Backend Setup
 
@@ -78,3 +78,8 @@ the file /etc/apache2/sites-enabled/000-default.conf and set the below content:
 
 </VirtualHost>
 ```
+
+## Using Docker Compose for Development
+
+- Install Docker
+- Run `docker-compose -up --build -d && yarn start`
