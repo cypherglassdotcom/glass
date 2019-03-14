@@ -12,7 +12,7 @@ program
   .usage('[options] <command> [...]')
   .option('-u, --url <url>', 'url [https://api.cypherglass.com]', 'https://api.cypherglass.com')
   .option('-t, --timeout <timeout>', 'bp.json reading timeout [5000]', 15000)
-  .option('-m, --mongoaddr <mongoaddr>', 'mongodb address [mongodb://localhost:27017]', 'mongodb://localhost:27017')
+  .option('-m, --mongoaddr <mongoaddr>', 'mongodb address [mongodb://localhost:27017]',  process.env.MONGO_URI || 'mongodb://localhost:27017')
   .option('-d, --database <database>', 'mongodb database [cg_glass]', 'cg_glass')
   .option('-c, --mongocoll <mongocoll>', 'mongodb collection [bps]', 'bps')
 
@@ -102,6 +102,11 @@ const saveBps = async () => {
 
     console.log("Connected successfully to MongoDb server")
 
+    console.log('------------------------')
+    console.log(program.database)
+    console.log(program.mongoaddr)
+    console.log(program.mongocoll)
+    console.log('------------------------')
     const db = client.db(program.database)
 
     const collection = db.collection(program.mongocoll)
